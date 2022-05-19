@@ -1,0 +1,22 @@
+.main {
+    padding-top: 4rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-bottom: 1.5rem;
+    /* background-color: var(--bg) !important;
+    color: var(--text) !important; */
+}
+
+@media only screen and (min-width: 769px) {
+    .main {
+        /* padding-left: 17.5rem;
+        padding-right: 1.5rem; */
+    }
+}
+
+@media only screen and (min-width: 1367px) {
+    .main {
+        /* padding-left: calc(17.5rem + 12.5%);
+        padding-right: calc(1.5rem + 12.5%); */
+    }
+}

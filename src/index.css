@@ -1,13 +1,38 @@
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+        "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+        "Helvetica Neue", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
-
+html {
+    font-size: 16;
+}
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+        monospace;
+}
+input:focus {
+    outline: none;
+}
+:root {
+    --bg: #fff;
+    --nav-bg: #f2f3f5;
+    --nav-selected: #e0e0e5;
+    --table-bg: #fff;
+    --table-selected: #e4e6e9;
+    --text: #303030;
+    --color-border: rgba(48, 48, 48, 0.16);
+
+    /* Theme Colors */
+    --color-blue: #445279;
+    --color-light-blue: #63769e;
+    --color-super-light-blue: #e3ebf6;
+    --color-dark-blue: #202249;
+
+    /* Support Colors */
+    --color-orange: #e7bb65;
+    --color-lime: #7ae765;
+    --color-pink: #e76565;
 }

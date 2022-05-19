@@ -1,0 +1,40 @@
+.headerDiv {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--color-light-blue);
+    width: 100vw;
+    color: white;
+    text-align: center;
+    height: 20vh;
+    padding: 1rem 3rem;
+}
+.form_div div {
+    width: 35vw;
+    background-color: var(--color-super-light-blue);
+    padding: 2rem 3rem;
+    margin-top: 2rem;
+    border-radius: 10px;
+}
+.form_div label {
+    color: var(--color-light-blue);
+}
+.input_desctiption {
+    border-radius: 8px;
+    padding: 0.6rem;
+    border: 1px solid var(--color-light-blue);
+}
+.input_create_post_image {
+    width: 60%;
+    height: 2.5rem;
+    border-radius: 8px;
+    border: 1px solid var(--color-light-blue);
+    padding-left: 0.6rem;
+}
+.imageTemp {
+    width: 10rem;
+    margin-left: 1rem;
+    margin-top: 1rem;
+    border-radius: 5px;
+}

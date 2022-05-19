@@ -1,0 +1,38 @@
+.form_div2 {
+    width: 60vw;
+    background-color: var(--color-super-light-blue);
+    padding: 2rem 3rem;
+    margin-top: 5rem;
+    border-radius: 10px;
+}
+.form_div2 label {
+    color: var(--color-light-blue);
+}
+.input_description_update {
+    border-radius: 8px;
+    padding: 0.6rem;
+    width: 100%;
+    border: 1px solid var(--color-light-blue);
+}
+.input_update_post_image {
+    width: 60%;
+    height: 2.5rem;
+    border-radius: 8px;
+    border: 1px solid var(--color-light-blue);
+    padding-left: 0.6rem;
+}
+.imageTemp_update {
+    width: 10rem;
+    border-radius: 5px;
+    margin: 1rem 2rem;
+    display: inline;
+}
+.header_update_form {
+    margin-bottom: 1rem;
+    color: var(--color-blue);
+}
+.input_file_update {
+    width: 50%;
+    margin-right: 0;
+    display: inline-block;
+}
