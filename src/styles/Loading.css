@@ -27,6 +27,7 @@
     overflow: hidden;
     background: #ffffff;
     background-color: rgba(0, 0, 0, 0.5);
+    z-index: 11;
 }
 .ldio-bn5u1hese6e {
     width: 100vw;
@@ -35,6 +36,7 @@
     transform: translateZ(0) scale(1);
     backface-visibility: hidden;
     transform-origin: 0 0; /* see note above */
+    z-index: 11;
 }
 .ldio-bn5u1hese6e div {
     box-sizing: content-box;

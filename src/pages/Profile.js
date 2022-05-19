@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Tab, Tabs } from "react-bootstrap";
 import {
     BoxArrowRight,
@@ -13,6 +13,7 @@ import "../styles/Profile.css";
 import { useLazyFetch } from "../utils/useFetch";
 import moment from "moment";
 import Swal from "sweetalert2";
+import { useTitle } from "../utils/useTitle";
 
 const Profile = () => {
     const navigate = useNavigate();
@@ -24,12 +25,13 @@ const Profile = () => {
     };
     const user = localStorage.getItem("life");
 
-    const [fetchDataProfile, { data, loading }] = useLazyFetch(
+    const [fetchDataProfile, { data }] = useLazyFetch(
         `${API}/profile/${JSON.parse(user).userId}`
     );
     //Fetch API Delete post
-    const [fetchDataDelete, { loading2 }] = useLazyFetch();
+    const [fetchDataDelete] = useLazyFetch();
 
+    useTitle(data?.fullname);
     useEffect(() => {
         fetchDataProfile();
     }, []);

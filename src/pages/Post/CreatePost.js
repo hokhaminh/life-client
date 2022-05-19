@@ -10,10 +10,12 @@ import Loading from "../../components/Loading";
 import HorizontalNav from "../../components/HorizontalNav";
 import { useNavigate } from "react-router-dom";
 import MyInput from "../../components/MyInput";
+import { useTitle } from "../../utils/useTitle";
 const CreatePost = () => {
     const FILE_SIZE = 160 * 1024;
     const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/png"];
     const user = localStorage.getItem("life");
+    useTitle("Create Post");
     const [urlTemp, setUrlTemp] = useState();
     const navigate = useNavigate();
     // const [images, setImages] = useState();
@@ -78,7 +80,7 @@ const CreatePost = () => {
         },
     });
 
-    const [fetchData, { data, loading }] = useLazyFetch(`${API}/post/create`, {
+    const [fetchData, { loading }] = useLazyFetch(`${API}/post/create`, {
         method: "post",
         onCompleted: (data) => {
             Swal.fire({
@@ -179,7 +181,11 @@ const CreatePost = () => {
                                             {formik.errors.image}
                                         </p>
                                     )}
-                                <img src={urlTemp} className="imageTemp" />
+                                <img
+                                    src={urlTemp}
+                                    alt="Preview"
+                                    className="imageTemp"
+                                />
                             </div>
                             <div>
                                 <MyInput

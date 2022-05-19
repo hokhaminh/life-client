@@ -4,8 +4,6 @@ import React from "react";
 import DashBoard from "../pages/DashBoard";
 import Register from "../pages/Authentication/Register";
 import Login from "../pages/Authentication/Login";
-
-import KhaMinh from "../pages/KhaMinh";
 import UserRoute from "./UserRoute";
 import CreatePost from "../pages/Post/CreatePost";
 import PostDetail from "../pages/Post/PostDetail";
@@ -28,7 +26,9 @@ const MainRoute = () => {
                 <Route path="/profile" element={<Profile />} />
             </Route>
 
-            <Route path="/post/update/:id" element={<UpdatePost />} />
+            <Route path="/" element={<UserRoute />}>
+                <Route path="/post/update/:id" element={<UpdatePost />} />
+            </Route>
 
             <Route path="/" element={<UserRoute />}>
                 <Route path="/create/post" element={<CreatePost />} />

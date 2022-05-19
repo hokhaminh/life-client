@@ -23,7 +23,7 @@ const UpdatePost = () => {
     //get postId from useParam
     const { id } = useParams();
 
-    const { loading, data1 } = useFetch(`${API}/post/${id}`, {
+    useFetch(`${API}/post/${id}`, {
         onCompleted: (data) => {
             setData(data);
             setUrlTemp(data.imageURL);
@@ -197,7 +197,11 @@ const UpdatePost = () => {
                                     </p>
                                 )}
                         </div>
-                        <img src={urlTemp} className="imageTemp_update" />
+                        <img
+                            src={urlTemp}
+                            alt="Preview"
+                            className="imageTemp_update"
+                        />
 
                         <MyInput
                             name="title"

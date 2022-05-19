@@ -4,13 +4,14 @@ import HorizontalNav from "../components/HorizontalNav";
 import doctorIMG from "../static/doctor.jpg";
 import sarahIMG from "../static/sarah-gilbert.jpg";
 import familyIMG from "../static/covid-family.jpg";
-import Button from "../components/Button";
-import { Navigate, useNavigate } from "react-router-dom";
+
+import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { useTitle } from "../utils/useTitle";
 const DashBoard = () => {
     const user = localStorage.getItem("life");
     const navigate = useNavigate();
+
     useTitle("Life");
     return (
         <>
@@ -51,9 +52,21 @@ const DashBoard = () => {
                     </div>
                 </div>
                 <div className="div2 d-flex flex-column align-items-center">
-                    <img src={sarahIMG} className="sarahIMG " />
-                    <img src={doctorIMG} className="doctorIMG" />
-                    <img src={familyIMG} className="familyIMG" />
+                    <img
+                        src={sarahIMG}
+                        alt="This is Sarah"
+                        className="sarahIMG "
+                    />
+                    <img
+                        src={doctorIMG}
+                        alt="This is a doctor"
+                        className="doctorIMG"
+                    />
+                    <img
+                        src={familyIMG}
+                        alt="This is a family"
+                        className="familyIMG"
+                    />
                 </div>
             </div>
         </>

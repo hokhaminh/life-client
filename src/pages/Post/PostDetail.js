@@ -1,20 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import HorizontalNav from "../../components/HorizontalNav";
 import "../../styles/Posts/PostDetail.css";
 import Button from "../../components/Button";
 import { useFetch, useLazyFetch } from "../../utils/useFetch";
 import { API } from "../../utils/constant";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import Loading from "../../components/Loading";
 import Swal from "sweetalert2";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import moment from "moment";
+import { useTitle } from "../../utils/useTitle";
 const PostDetail = () => {
     const user = localStorage.getItem("life");
     const navigate = useNavigate();
     const [check, setCheck] = useState(false);
-    //check if the user is the owner of the post
 
     //get postId from useParam
     const { id } = useParams();
@@ -25,7 +24,7 @@ const PostDetail = () => {
         navigator.clipboard.writeText(text);
     }
     //get post detail
-    const { loading, data } = useFetch(`${API}/post/${id}`, {
+    const { data } = useFetch(`${API}/post/${id}`, {
         onCompleted: (data) => {
             if (data.userId === JSON.parse(user).userId) {
                 setCheck(true);
@@ -46,7 +45,7 @@ const PostDetail = () => {
             });
         },
     });
-
+    useTitle(data?.fullname);
     //get comment
     const [fetchDataComment, fetchResult] = useLazyFetch(
         `${API}/comment/${id}`,
@@ -185,12 +184,12 @@ const PostDetail = () => {
                 <p className="description">{data?.description}</p>
                 <div className="share">
                     <p className="link_share">
-                        https://localhost:3000{location.pathname}
+                        https://living-life.netlify.app{location.pathname}
                         <button
                             className="copy_button"
                             onClick={() => {
                                 copy(
-                                    `https://localhost:3000${location.pathname}`
+                                    `https://living-life.netlify.app${location.pathname}`
                                 );
                             }}
                         >
