@@ -15,6 +15,7 @@ const MainRoute = () => {
         <Routes>
             {/* DashBoard */}
             <Route path="/" element={<DashBoard />} />
+            <Route path="*" element={<DashBoard />} />
 
             <Route path="/post/:id" element={<PostDetail />} />
 
