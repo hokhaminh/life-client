@@ -40,14 +40,14 @@ const CreatePost = () => {
                 ),
             description: Yup.string().required("Description is required"),
             image: Yup.mixed()
-                .required()
+                .required("Image is required")
                 .test(
                     "fileSize",
                     "File Size is too large",
-                    (value) => value.size <= FILE_SIZE
+                    (value) => value?.size <= FILE_SIZE
                 )
                 .test("fileType", "Unsupported File Format", (value) =>
-                    SUPPORTED_FORMATS.includes(value.type)
+                    SUPPORTED_FORMATS.includes(value?.type)
                 ),
             password: Yup.string().required("Password is required"),
             title: Yup.string().required("Title is required"),
@@ -181,11 +181,7 @@ const CreatePost = () => {
                                             {formik.errors.image}
                                         </p>
                                     )}
-                                <img
-                                    src={urlTemp}
-                                    alt="Preview"
-                                    className="imageTemp"
-                                />
+                                <img src={urlTemp} className="imageTemp" />
                             </div>
                             <div>
                                 <MyInput
