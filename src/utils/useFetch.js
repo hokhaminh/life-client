@@ -114,19 +114,20 @@ async function handleFetch(
         options.finally && options.finally(response.data);
     } catch (error) {
         // If status is 401 - UNAUTHORIZED => try to refresh token and refetch
-        if (error.response && error.response.status === 401) {
-            try {
-                // Refresh token
-                await refreshToken(history);
-                // Refetch
-                await handleFetch(url, options, setData, setError, setLoading);
-            } catch (err) {
-                setError(error.response.data);
-                setData(undefined);
-                options.onError && options.onError(error.response.data);
-                setLoading(false);
-            }
-        } else if (error.response) {
+        // if (error.response && error.response.status === 401) {
+        //     try {
+        //         // Refresh token
+        //         await refreshToken(history);
+        //         // Refetch
+        //         await handleFetch(url, options, setData, setError, setLoading);
+        //     } catch (err) {
+        //         setError(error.response.data);
+        //         setData(undefined);
+        //         options.onError && options.onError(error.response.data);
+        //         setLoading(false);
+        //     }
+        // } else
+        if (error.response) {
             setError(error.response.data);
             setData(undefined);
             options.onError && options.onError(error.response.data);
