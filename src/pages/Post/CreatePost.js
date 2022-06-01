@@ -11,6 +11,7 @@ import HorizontalNav from "../../components/HorizontalNav";
 import { useNavigate } from "react-router-dom";
 import MyInput from "../../components/MyInput";
 import { useTitle } from "../../utils/useTitle";
+import moment from "moment";
 const CreatePost = () => {
     const FILE_SIZE = 160 * 1024;
     const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/png"];
@@ -18,7 +19,8 @@ const CreatePost = () => {
     useTitle("Create Post");
     const [urlTemp, setUrlTemp] = useState();
     const navigate = useNavigate();
-    // const [images, setImages] = useState();
+
+    //The main formik hook for the Post
     const formik = useFormik({
         initialValues: {
             fullname: "",
@@ -31,7 +33,12 @@ const CreatePost = () => {
         },
         validationSchema: Yup.object({
             fullname: Yup.string().required("Fullname is required"),
-            birthyear: Yup.date().required("Birthyear is required"),
+            birthyear: Yup.date()
+                .required("Birthyear is required")
+                .min(
+                    Yup.ref(moment()),
+                    "Birthyear must be less than current day"
+                ),
             deathyear: Yup.date()
                 .required("Deathyear is required")
                 .min(
@@ -80,6 +87,7 @@ const CreatePost = () => {
         },
     });
 
+    //Fetch data to create a post
     const [fetchData, { loading }] = useLazyFetch(`${API}/post/create`, {
         method: "post",
         onCompleted: (data) => {
@@ -122,6 +130,7 @@ const CreatePost = () => {
                     <form className="w-100" onSubmit={formik.handleSubmit}>
                         <div className="d-flex justify-content-evenly form_div">
                             <div>
+                                {/* Fullname Input */}
                                 <MyInput
                                     name="fullname"
                                     label="Fullname"
@@ -131,6 +140,8 @@ const CreatePost = () => {
                                     errorMessage={formik.errors.fullname}
                                     errorTouched={formik.touched.fullname}
                                 />
+
+                                {/* BirthYear Input */}
                                 <MyInput
                                     name="birthyear"
                                     label="BirthYear"
@@ -140,6 +151,8 @@ const CreatePost = () => {
                                     errorMessage={formik.errors.birthyear}
                                     errorTouched={formik.touched.birthyear}
                                 />
+
+                                {/* DeathYear Input */}
                                 <MyInput
                                     name="deathyear"
                                     label="DeathYear"
@@ -150,6 +163,7 @@ const CreatePost = () => {
                                     errorTouched={formik.touched.deathyear}
                                 />
 
+                                {/* Image Input */}
                                 <label
                                     htmlFor="image"
                                     className="ms-3 form-label"
@@ -184,6 +198,7 @@ const CreatePost = () => {
                                 <img src={urlTemp} className="imageTemp" />
                             </div>
                             <div>
+                                {/* Title Input */}
                                 <MyInput
                                     name="title"
                                     label="Title"
@@ -193,6 +208,8 @@ const CreatePost = () => {
                                     errorMessage={formik.errors.title}
                                     errorTouched={formik.touched.title}
                                 />
+
+                                {/* Description Input */}
                                 <label
                                     htmlFor="description"
                                     className="d-block ms-3 mb-1"
@@ -215,6 +232,8 @@ const CreatePost = () => {
                                             {formik.errors.username}
                                         </p>
                                     )}
+
+                                {/* Password Input */}
                                 <MyInput
                                     name="password"
                                     label="Password"
