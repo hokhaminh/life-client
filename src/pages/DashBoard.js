@@ -17,12 +17,12 @@ const DashBoard = () => {
         <>
             <HorizontalNav />
             <div className="parent">
-                <div className="div1 d-flex flex-column justify-content-center align-items-center">
-                    <div>
+                <div className="div1 d-flex flex-md-column justify-content-md-center align-items-md-center">
+                    <div className="left-side">
                         <h1 className="heading_dashboard">
                             Keep Memories Of Your Loved Ones
                         </h1>
-                        <p className="fs-5">
+                        <p className="long-text">
                             Almost everyone -- 99% of people that have ever
                             lived are now forgotten. Create an online memorial
                             to keep those memories and share it to people you

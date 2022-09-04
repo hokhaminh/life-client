@@ -199,3 +199,32 @@
     margin-bottom: 2rem;
     font-weight: lighter;
 }
+@media only screen and (max-width: 600px) {
+    .fullName {
+        font-size: 2rem;
+        margin: 10% 0 2rem 3rem;
+    }
+    .birthYear {
+        text-align: start;
+        font-size: 2rem;
+        font-weight: bold;
+        margin-left: 3rem;
+        line-height: 2.5rem;
+    }
+    .title {
+        text-align: left;
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin: 10% 1rem 0 3rem;
+    }
+    .img_post {
+        border-radius: 10px;
+    }
+    .div11 {
+    }
+    .div22 {
+    }
+    .parent1 {
+        display: block;
+    }
+}

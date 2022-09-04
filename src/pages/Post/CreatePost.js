@@ -33,18 +33,18 @@ const CreatePost = () => {
         },
         validationSchema: Yup.object({
             fullname: Yup.string().required("Fullname is required"),
-            birthyear: Yup.date()
-                .required("Birthyear is required")
-                .min(
-                    Yup.ref(moment()),
-                    "Birthyear must be less than current day"
-                ),
-            deathyear: Yup.date()
-                .required("Deathyear is required")
-                .min(
-                    Yup.ref("birthyear"),
-                    "Death year must be after birth year"
-                ),
+            // birthyear: Yup.date()
+            //     .required("Birthyear is required")
+            //     .min(
+            //         Yup.ref(moment()),
+            //         "Birthyear must be less than current day"
+            //     ),
+            // deathyear: Yup.date()
+            //     .required("Deathyear is required")
+            //     .min(
+            //         Yup.ref("birthyear"),
+            //         "Death year must be after birth year"
+            //     ),
             description: Yup.string().required("Description is required"),
             image: Yup.mixed()
                 .required("Image is required")
@@ -121,14 +121,14 @@ const CreatePost = () => {
                     <h1 className="mb-3">
                         Create a place to share memories of your loved one
                     </h1>
-                    <q className="fs-5 fst-italic">
+                    <q className="fst-italic">
                         When someone you love becames a memory,
                         <br /> the memory becames a treasure.
                     </q>
                 </div>
                 <div>
                     <form className="w-100" onSubmit={formik.handleSubmit}>
-                        <div className="d-flex justify-content-evenly form_div">
+                        <div className="d-flex flex-column justify-content-center flex-md-row justify-content-md-evenly form_div">
                             <div>
                                 {/* Fullname Input */}
                                 <MyInput

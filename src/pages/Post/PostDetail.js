@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import HorizontalNav from "../../components/HorizontalNav";
 import "../../styles/Posts/PostDetail.css";
 import Button from "../../components/Button";
@@ -23,14 +23,21 @@ const PostDetail = () => {
     function copy(text) {
         navigator.clipboard.writeText(text);
     }
-    //get post detail
-    const { data } = useFetch(`${API}/post/${id}`, {
+    useTitle("Life");
+    //fetch get user id by post id
+    const { data } = useFetch(`${API}/post/user/${id}`, {
         onCompleted: (data) => {
-            if (data.userId === JSON.parse(user).userId) {
+            if (data === JSON.parse(user).userId) {
                 setCheck(true);
+                fetchDataPost();
             }
-            fetchDataComment();
         },
+        onError: (error) => {
+            Swal.fire("Get post user failed", error.message, "error");
+        },
+    });
+    //get post detail
+    const [fetchDataPost, fetchPostResult] = useLazyFetch(`${API}/post/${id}`, {
         onError: (error) => {
             Swal.fire({
                 title: "Oops...",
@@ -45,15 +52,10 @@ const PostDetail = () => {
             });
         },
     });
-    useTitle(data?.fullname);
+
     //get comment
     const [fetchDataComment, fetchResult] = useLazyFetch(
-        `${API}/comment/${id}`,
-        {
-            onError: (error) => {
-                // Swal.fire("Get comment failed!", error.message, "error");
-            },
-        }
+        `${API}/comment/${id}`
     );
 
     //create comment
@@ -103,6 +105,8 @@ const PostDetail = () => {
             fetchDataCheck();
         },
     });
+
+    //Fetch check password
     const [fetchDataCheck] = useLazyFetch(`${API}/post/password`, {
         method: "post",
         body: {
@@ -112,6 +116,8 @@ const PostDetail = () => {
         onCompleted: (data) => {
             if (data === true) {
                 setCheck(!check);
+                fetchDataPost();
+                fetchDataComment();
             } else if (check === false) {
                 Swal.fire("Password is wrong!", "", "error");
             }
@@ -120,10 +126,6 @@ const PostDetail = () => {
             Swal.fire("Create comment failed!", error.message, "error");
         },
     });
-
-    // useEffect(() => {
-    //     fetchDataComment();
-    // }, []);
 
     if (check === false) {
         return (
@@ -154,118 +156,130 @@ const PostDetail = () => {
                 </div>
             </div>
         );
-    }
-    return (
-        <>
-            {/* {loading && <Loading />} */}
-            <HorizontalNav />
-            <div className="parent1">
-                <div className="div11">
-                    <h1 className="fullName">{data?.fullname}</h1>
-                    <h2 className="birthYear">
-                        {moment(data?.birthYear).format("YYYY")}
-                        <br />-<br />
-                        {moment(data?.deathYear).format("YYYY")}
-                    </h2>
-                    <h3 className="title">{data?.title}</h3>
+    } else {
+        return (
+            <>
+                {/* {loading && <Loading />} */}
+                <HorizontalNav />
+                <div className="parent1">
+                    <div className="div11">
+                        <h1 className="fullName">
+                            {fetchPostResult.data?.fullname}
+                        </h1>
+                        <h2 className="birthYear">
+                            {moment(fetchPostResult.data?.birthYear).format(
+                                "YYYY"
+                            )}
+                            <br />-<br />
+                            {moment(fetchPostResult.data?.deathYear).format(
+                                "YYYY"
+                            )}
+                        </h2>
+                        <h3 className="title">{fetchPostResult.data?.title}</h3>
+                    </div>
+                    <div className="div22">
+                        <img
+                            src={fetchPostResult.data?.imageURL}
+                            alt="The loved one."
+                            className="w-100 img_post"
+                        />
+                    </div>
                 </div>
-                <div className="div22">
-                    <img
-                        src={data?.imageURL}
-                        alt="The loved one."
-                        className="w-100 img_post"
-                    />
-                </div>
-            </div>
 
-            <h1 className="name_backGround">{data?.fullname.toUpperCase()}</h1>
-            <hr />
-            <div className="d-flex">
-                <p className="description">{data?.description}</p>
-                <div className="share">
-                    <p className="link_share">
-                        https://living-life.netlify.app{location.pathname}
-                        <button
-                            className="copy_button"
-                            onClick={() => {
-                                copy(
-                                    `https://living-life.netlify.app${location.pathname}`
-                                );
-                            }}
-                        >
-                            Copy
-                        </button>
+                <h1 className="name_backGround">
+                    {fetchPostResult.data?.fullname.toUpperCase()}
+                </h1>
+                <hr />
+                <div className="d-flex">
+                    <p className="description">
+                        {fetchPostResult.data?.description}
                     </p>
+                    <div className="share">
+                        <p className="link_share">
+                            https://living-life.netlify.app{location.pathname}
+                            <button
+                                className="copy_button"
+                                onClick={() => {
+                                    copy(
+                                        `https://living-life.netlify.app${location.pathname}`
+                                    );
+                                }}
+                            >
+                                Copy
+                            </button>
+                        </p>
+                    </div>
                 </div>
-            </div>
-            <div className="comment_section">
-                <h1 className="comment_title">Comment</h1>
-                <form onSubmit={formik.handleSubmit}>
-                    <div className="d-flex justify-content-center ">
-                        <div className="d-flex flex-column infor_input">
-                            <label>Name</label>
-                            <input
-                                type="text"
-                                name="name"
-                                id="name"
-                                value={formik.values.name}
-                                onChange={formik.handleChange}
-                            />
-                            {formik.errors.name && formik.touched.name && (
-                                <p className="text-danger">
-                                    {formik.errors.name}
-                                </p>
-                            )}
-                            <label>Email</label>
-                            <input
-                                type="email"
-                                name="email"
-                                id="email"
-                                value={formik.values.email}
-                                onChange={formik.handleChange}
-                            />
-                            {formik.errors.email && formik.touched.email && (
-                                <p className="text-danger">
-                                    {formik.errors.email}
-                                </p>
-                            )}
-                        </div>
-                        <div className="d-flex flex-column comment_input">
-                            <textarea
-                                rows="4"
-                                className="mt-4"
-                                placeholder="Add a comment..."
-                                name="content"
-                                id="content"
-                                value={formik.values.content}
-                                onChange={formik.handleChange}
-                            />
-                            {formik.errors.content &&
-                                formik.touched.content && (
+                <div className="comment_section">
+                    <h1 className="comment_title">Comment</h1>
+                    <form onSubmit={formik.handleSubmit}>
+                        <div className="d-flex justify-content-center ">
+                            <div className="d-flex flex-column infor_input">
+                                <label>Name</label>
+                                <input
+                                    type="text"
+                                    name="name"
+                                    id="name"
+                                    value={formik.values.name}
+                                    onChange={formik.handleChange}
+                                />
+                                {formik.errors.name && formik.touched.name && (
                                     <p className="text-danger">
-                                        {formik.errors.content}
+                                        {formik.errors.name}
                                     </p>
                                 )}
-                            <Button className="w-100" btn="dark_blue">
-                                Post
-                            </Button>
+                                <label>Email</label>
+                                <input
+                                    type="email"
+                                    name="email"
+                                    id="email"
+                                    value={formik.values.email}
+                                    onChange={formik.handleChange}
+                                />
+                                {formik.errors.email &&
+                                    formik.touched.email && (
+                                        <p className="text-danger">
+                                            {formik.errors.email}
+                                        </p>
+                                    )}
+                            </div>
+                            <div className="d-flex flex-column comment_input">
+                                <textarea
+                                    rows="4"
+                                    className="mt-4"
+                                    placeholder="Add a comment..."
+                                    name="content"
+                                    id="content"
+                                    value={formik.values.content}
+                                    onChange={formik.handleChange}
+                                />
+                                {formik.errors.content &&
+                                    formik.touched.content && (
+                                        <p className="text-danger">
+                                            {formik.errors.content}
+                                        </p>
+                                    )}
+                                <Button className="w-100" btn="dark_blue">
+                                    Post
+                                </Button>
+                            </div>
                         </div>
+                    </form>
+                    <div>
+                        {fetchResult.data?.map((record) => (
+                            <Comment
+                                key={record.commentId}
+                                name={record.name}
+                                email={record.email}
+                                createAt={record.createdAt}
+                                content={record.commentContent}
+                            />
+                        ))}
                     </div>
-                </form>
-                <div>
-                    {fetchResult.data?.map((record) => (
-                        <Comment
-                            key={record.commentId}
-                            name={record.name}
-                            email={record.email}
-                            createAt={record.createdAt}
-                            content={record.commentContent}
-                        />
-                    ))}
                 </div>
-            </div>
-        </>
-    );
+            </>
+        );
+    }
 };
 
 export default PostDetail;

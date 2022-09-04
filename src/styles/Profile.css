@@ -44,7 +44,7 @@
     transition: all 0.2s ease-in;
     position: relative;
     overflow: hidden;
-    font-size: 19px;
+    font-size: 16px;
     color: var(--color-blue);
     z-index: 1;
 }

@@ -8,7 +8,12 @@
     color: white;
     text-align: center;
     height: 20vh;
-    padding: 1rem 3rem;
+    padding: 5.5rem 3rem;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+.headerDiv q {
+    font-size: 1.5rem;
 }
 .form_div div {
     width: 35vw;
@@ -24,6 +29,7 @@
     border-radius: 8px;
     padding: 0.6rem;
     border: 1px solid var(--color-light-blue);
+    max-width: 100%;
 }
 .input_create_post_image {
     width: 60%;
@@ -37,4 +43,22 @@
     margin-left: 1rem;
     margin-top: 1rem;
     border-radius: 5px;
+}
+
+@media only screen and (max-width: 600px) {
+    .headerDiv {
+        padding: 3rem 3rem;
+    }
+    .headerDiv h1 {
+        font-size: 1.4rem;
+    }
+    .headerDiv q {
+        font-size: 1rem;
+    }
+    .form_div div {
+        width: 90%;
+        margin: auto;
+        padding: 1rem 1rem;
+        margin-top: 1rem;
+    }
 }
