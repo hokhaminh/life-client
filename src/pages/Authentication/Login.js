@@ -44,7 +44,13 @@ const Login = () => {
             );
         },
         onError: (error) => {
-            Swal.fire("Login failed!", error, "error");
+            Swal.fire({
+                title: "Login failed!",
+                text: "Wrong username or password",
+                icon: "error",
+                confirmButtonText: "Try again",
+                confirmButtonColor: "#445279",
+            });
         },
         finally: () => {
             navigate("/");

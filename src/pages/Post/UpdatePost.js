@@ -55,13 +55,19 @@ const UpdatePost = () => {
                 ),
             description: Yup.string().required("Description is required"),
             image: Yup.mixed()
+                .nullable()
+                .notRequired()
                 .test(
-                    "fileSize",
-                    "File Size is too large",
-                    (value) => value.size <= FILE_SIZE
+                    "FILE_SIZE",
+                    "Uploaded file is too big.",
+                    (value) => !value || (value && value.size <= FILE_SIZE)
                 )
-                .test("fileType", "Unsupported File Format", (value) =>
-                    SUPPORTED_FORMATS.includes(value.type)
+                .test(
+                    "FILE_FORMAT",
+                    "Uploaded file has unsupported format.",
+                    (value) =>
+                        !value ||
+                        (value && SUPPORTED_FORMATS.includes(value.type))
                 ),
             password: Yup.string().required("Password is required"),
             title: Yup.string().required("Title is required"),

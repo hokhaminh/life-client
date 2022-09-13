@@ -14,15 +14,15 @@
 }
 .div22 {
     grid-area: 1 / 4 / 6 / 6;
-    width: 50%;
-    margin: 6rem 0 0 3rem;
+    width: 85%;
+    margin: 6rem 0 0 0;
 }
 .img_post {
     border-radius: 20px;
     box-shadow: 5px 5px 25px 0px rgba(0, 0, 0, 0.6);
 }
 .fullName {
-    font-size: 2rem;
+    font-size: 3rem;
     margin: 10% 0 2rem 10rem;
 }
 .birthYear {
@@ -219,12 +219,56 @@
     }
     .img_post {
         border-radius: 10px;
-    }
-    .div11 {
-    }
-    .div22 {
+        margin-left: 2rem;
     }
     .parent1 {
         display: block;
+    }
+    .name_backGround {
+        font-size: 3rem;
+        margin: 0rem;
+    }
+    .description {
+        width: 100%;
+        margin: 0;
+        font-size: 1rem;
+    }
+    .share {
+        width: fit-content;
+        margin-top: 1rem;
+    }
+    .link_share {
+        font-size: 1rem;
+        word-break: break-all;
+    }
+    .copy_button {
+        width: 100%;
+        margin-left: 0;
+        margin-top: 1rem;
+        padding: 5px 10px;
+        border: none;
+        /* border-radius: 15px; */
+        color: #212121;
+        z-index: 1;
+        background: #e8e8e8;
+        position: relative;
+        font-weight: 1000;
+        font-size: 15px;
+        /* -webkit-box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27); */
+        /* box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27); */
+        transition: all 250ms;
+        overflow: hidden;
+    }
+    .infor_input {
+        width: 100%;
+        margin-right: 0;
+    }
+    .comment_section {
+        width: 90%;
+        padding: 1rem;
+        border-radius: 15px;
+    }
+    .comment_input {
+        width: 100%;
     }
 }

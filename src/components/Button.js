@@ -6,6 +6,7 @@ const Button = ({
     btn = "blue",
     style = {},
     className = "",
+    disabled = false,
     onClick = () => {},
 }) => {
     return (
@@ -15,6 +16,7 @@ const Button = ({
                 ...buttonOptions[btn],
                 ...style,
             }}
+            disabled={disabled}
             onClick={onClick}
             type="submit"
         >

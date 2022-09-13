@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import HorizontalNav from "../../components/HorizontalNav";
 import "../../styles/Posts/PostDetail.css";
 import Button from "../../components/Button";
@@ -10,6 +10,8 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import moment from "moment";
 import { useTitle } from "../../utils/useTitle";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 const PostDetail = () => {
     const user = localStorage.getItem("life");
     const navigate = useNavigate();
@@ -24,8 +26,9 @@ const PostDetail = () => {
         navigator.clipboard.writeText(text);
     }
     useTitle("Life");
+
     //fetch get user id by post id
-    const { data } = useFetch(`${API}/post/user/${id}`, {
+    useFetch(`${API}/post/user/${id}`, {
         onCompleted: (data) => {
             if (data === JSON.parse(user).userId) {
                 setCheck(true);
@@ -36,8 +39,29 @@ const PostDetail = () => {
             Swal.fire("Get post user failed", error.message, "error");
         },
     });
+
+    //fetch check poss password null
+    useFetch(`${API}/post/password/null/${id}`, {
+        onCompleted: (data) => {
+            if (data === true) {
+                setCheck(true);
+                fetchDataPost();
+            }
+        },
+        onError: (error) => {
+            Swal.fire(
+                "Something is wrong",
+                "Please console for more infomation",
+                "error"
+            );
+        },
+    });
+
     //get post detail
     const [fetchDataPost, fetchPostResult] = useLazyFetch(`${API}/post/${id}`, {
+        onCompleted: (data) => {
+            fetchDataComment();
+        },
         onError: (error) => {
             Swal.fire({
                 title: "Oops...",
@@ -117,7 +141,6 @@ const PostDetail = () => {
             if (data === true) {
                 setCheck(!check);
                 fetchDataPost();
-                fetchDataComment();
             } else if (check === false) {
                 Swal.fire("Password is wrong!", "", "error");
             }
@@ -159,30 +182,60 @@ const PostDetail = () => {
     } else {
         return (
             <>
-                {/* {loading && <Loading />} */}
                 <HorizontalNav />
                 <div className="parent1">
                     <div className="div11">
                         <h1 className="fullName">
-                            {fetchPostResult.data?.fullname}
+                            {fetchPostResult.loading ? (
+                                <Skeleton baseColor="#d0d2f5" width="30%" />
+                            ) : (
+                                fetchPostResult.data?.fullname
+                            )}
                         </h1>
                         <h2 className="birthYear">
-                            {moment(fetchPostResult.data?.birthYear).format(
-                                "YYYY"
+                            {fetchPostResult.loading ? (
+                                <Skeleton baseColor="#d0d2f5" width="20%" />
+                            ) : (
+                                moment(fetchPostResult.data?.birthYear).format(
+                                    "YYYY"
+                                )
                             )}
                             <br />-<br />
-                            {moment(fetchPostResult.data?.deathYear).format(
-                                "YYYY"
+                            {fetchPostResult.loading ? (
+                                <Skeleton baseColor="#d0d2f5" width="20%" />
+                            ) : (
+                                moment(fetchPostResult.data?.deathYear).format(
+                                    "YYYY"
+                                )
                             )}
                         </h2>
-                        <h3 className="title">{fetchPostResult.data?.title}</h3>
+                        <h3 className="title">
+                            {fetchPostResult.loading ? (
+                                <Skeleton baseColor="#d0d2f5" count={3} />
+                            ) : (
+                                fetchPostResult.data?.title
+                            )}
+                        </h3>
                     </div>
                     <div className="div22">
-                        <img
-                            src={fetchPostResult.data?.imageURL}
-                            alt="The loved one."
-                            className="w-100 img_post"
-                        />
+                        {fetchPostResult.loading ? (
+                            <Skeleton
+                                baseColor="#d0d2f5"
+                                circle
+                                height="30%"
+                                containerClassName="avatar-skeleton"
+                            />
+                        ) : (
+                            <img
+                                src={
+                                    fetchPostResult.data?.imageURL !== null
+                                        ? fetchPostResult.data?.imageURL
+                                        : "https://i.ibb.co/zNDpV0N/depositphotos-189716808-stock-illustration-black-mourning-ribbon-isolated-on.webp"
+                                }
+                                alt="The loved one."
+                                className="w-100 img_post"
+                            />
+                        )}
                     </div>
                 </div>
 
@@ -190,11 +243,11 @@ const PostDetail = () => {
                     {fetchPostResult.data?.fullname.toUpperCase()}
                 </h1>
                 <hr />
-                <div className="d-flex">
+                <div className="d-flex flex-md-row flex-column px-3 py-2">
                     <p className="description">
                         {fetchPostResult.data?.description}
                     </p>
-                    <div className="share">
+                    <div className="share align-self-center">
                         <p className="link_share">
                             https://living-life.netlify.app{location.pathname}
                             <button
@@ -213,7 +266,7 @@ const PostDetail = () => {
                 <div className="comment_section">
                     <h1 className="comment_title">Comment</h1>
                     <form onSubmit={formik.handleSubmit}>
-                        <div className="d-flex justify-content-center ">
+                        <div className="d-flex flex-md-row flex-column justify-content-center ">
                             <div className="d-flex flex-column infor_input">
                                 <label>Name</label>
                                 <input

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import * as Yup from "yup";
 import "../../styles/Posts/CreatePost.css";
 import Button from "../../components/Button";
@@ -11,14 +11,22 @@ import HorizontalNav from "../../components/HorizontalNav";
 import { useNavigate } from "react-router-dom";
 import MyInput from "../../components/MyInput";
 import { useTitle } from "../../utils/useTitle";
-import moment from "moment";
+import ReCAPTCHA from "react-google-recaptcha";
+import { useWindowSize } from "./../../utils/useWindowSize";
 const CreatePost = () => {
     const FILE_SIZE = 160 * 1024;
     const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/png"];
+    const size = useWindowSize();
     const user = localStorage.getItem("life");
     useTitle("Create Post");
     const [urlTemp, setUrlTemp] = useState();
     const navigate = useNavigate();
+    const [disableSubmit, setDisableSubmit] = useState(true);
+    const captchaRef = useRef(null);
+
+    //get today date
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
 
     //The main formik hook for the Post
     const formik = useFormik({
@@ -30,46 +38,55 @@ const CreatePost = () => {
             image: "",
             password: "",
             title: "",
+            recaptcha: "",
         },
         validationSchema: Yup.object({
             fullname: Yup.string().required("Fullname is required"),
-            // birthyear: Yup.date()
-            //     .required("Birthyear is required")
-            //     .min(
-            //         Yup.ref(moment()),
-            //         "Birthyear must be less than current day"
-            //     ),
-            // deathyear: Yup.date()
-            //     .required("Deathyear is required")
-            //     .min(
-            //         Yup.ref("birthyear"),
-            //         "Death year must be after birth year"
-            //     ),
+            birthyear: Yup.date()
+                .required("Birthyear is required")
+                .max(today, "Birthyear must be in the past"),
+            deathyear: Yup.date()
+                .required("Deathyear is required")
+                .min(
+                    Yup.ref("birthyear"),
+                    "Death year must be after birth year"
+                )
+                .max(today, "Death year must be in the past"),
             description: Yup.string().required("Description is required"),
             image: Yup.mixed()
-                .required("Image is required")
+                .nullable()
+                .notRequired()
                 .test(
-                    "fileSize",
-                    "File Size is too large",
-                    (value) => value?.size <= FILE_SIZE
+                    "FILE_SIZE",
+                    "Uploaded file is too big.",
+                    (value) => !value || (value && value.size <= FILE_SIZE)
                 )
-                .test("fileType", "Unsupported File Format", (value) =>
-                    SUPPORTED_FORMATS.includes(value?.type)
+                .test(
+                    "FILE_FORMAT",
+                    "Uploaded file has unsupported format.",
+                    (value) =>
+                        !value ||
+                        (value && SUPPORTED_FORMATS.includes(value.type))
                 ),
-            password: Yup.string().required("Password is required"),
+            password: Yup.string(),
             title: Yup.string().required("Title is required"),
+            // recaptcha: Yup.string().required("Confirm that you are human."),
         }),
+        validateOnChange: false,
+        validateOnBlur: false,
         onSubmit: (values) => {
             Swal.fire({
                 title: "Are you sure?",
                 text: "Press OK to continue",
-                icon: "warning      ",
+                icon: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#445279",
                 cancelButtonColor: "#e76565",
                 confirmButtonText: "OK",
             }).then((result) => {
                 if (result.isConfirmed) {
+                    const token = captchaRef.current.getValue();
+                    captchaRef.current.reset();
                     const formData = new FormData();
                     formData.append("image", formik.values.image);
                     formData.append("title", formik.values.title);
@@ -79,6 +96,7 @@ const CreatePost = () => {
                     formData.append("fullname", formik.values.fullname);
                     formData.append("password", formik.values.password);
                     formData.append("userId", JSON.parse(user).userId);
+                    formData.append("token", token);
                     fetchData("", {
                         body: formData,
                     });
@@ -108,9 +126,35 @@ const CreatePost = () => {
             });
         },
         onError: (error) => {
-            Swal.fire("Create post failed!", error.message, "error");
+            //error if captcha is not valid
+            if (error.status === 404) {
+                Swal.fire("Create post failed!", error.message, "error");
+                setDisableSubmit(true);
+            } else if (error.status === 400) {
+                //error if input is not valid
+                let errorMessage =
+                    error.errors[Object.keys(error.errors)[0]][0];
+                Swal.fire("Create post failed!", errorMessage, "error");
+                setDisableSubmit(true);
+            }
         },
     });
+
+    // if (size.width < 768) {
+    //     return (
+    //         <div>
+    //             <Phone />
+    //             <h4>This device is not supported</h4>{" "}
+    //             <p>
+    //                 Please use a desktop computer to fully access all the
+    //                 features
+    //             </p>
+    //         </div>
+    //     );
+    // }
+    // if (size.width < 768) {
+    //     setDisableSubmit(false);
+    // }
 
     return (
         <>
@@ -118,9 +162,9 @@ const CreatePost = () => {
             <HorizontalNav />
             <div style={{ marginTop: "3.5rem" }}>
                 <div className="headerDiv">
-                    <h1 className="mb-3">
+                    <h2 className="mb-3">
                         Create a place to share memories of your loved one
-                    </h1>
+                    </h2>
                     <q className="fst-italic">
                         When someone you love becames a memory,
                         <br /> the memory becames a treasure.
@@ -129,7 +173,7 @@ const CreatePost = () => {
                 <div>
                     <form className="w-100" onSubmit={formik.handleSubmit}>
                         <div className="d-flex flex-column justify-content-center flex-md-row justify-content-md-evenly form_div">
-                            <div>
+                            <div className="px-4 py-3 mt-4 divtrai">
                                 {/* Fullname Input */}
                                 <MyInput
                                     name="fullname"
@@ -195,9 +239,33 @@ const CreatePost = () => {
                                             {formik.errors.image}
                                         </p>
                                     )}
-                                <img src={urlTemp} className="imageTemp" />
+                                <div className="d-flex justify-content-around align-items-center">
+                                    <img
+                                        src={urlTemp}
+                                        className="imageTemp"
+                                        alt="Preview picture"
+                                    />
+                                    <ReCAPTCHA
+                                        name="recaptcha"
+                                        sitekey={process.env.REACT_APP_SITE_KEY}
+                                        ref={captchaRef}
+                                        onChange={useCallback(() => {
+                                            setDisableSubmit(false);
+                                        })}
+                                        style={
+                                            size.width < 768
+                                                ? { display: "none" }
+                                                : {
+                                                      width: "60%",
+                                                      marginTop: "1rem",
+                                                      display: "inline-block",
+                                                  }
+                                        }
+                                    />
+                                </div>
                             </div>
-                            <div>
+
+                            <div className="px-4 py-3 mt-4 divPhai">
                                 {/* Title Input */}
                                 <MyInput
                                     name="title"
@@ -226,10 +294,10 @@ const CreatePost = () => {
                                     onChange={formik.handleChange}
                                     value={formik.values.description}
                                 ></textarea>
-                                {formik.errors.username &&
-                                    formik.touched.username && (
+                                {formik.errors.description &&
+                                    formik.touched.description && (
                                         <p className="text-danger">
-                                            {formik.errors.username}
+                                            {formik.errors.description}
                                         </p>
                                     )}
 
@@ -245,8 +313,16 @@ const CreatePost = () => {
                                 />
                             </div>
                         </div>
+
                         <div className="d-flex justify-content-center">
-                            <Button className="mt-4 px-5 py-3">Confirm</Button>
+                            <Button
+                                className="mt-4 px-5 py-3"
+                                disabled={
+                                    size.width < 768 ? false : disableSubmit
+                                }
+                            >
+                                Confirm
+                            </Button>
                         </div>
                     </form>
                 </div>

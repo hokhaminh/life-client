@@ -16,10 +16,10 @@
     font-size: 1.5rem;
 }
 .form_div div {
-    width: 35vw;
+    /* width: 35vw; */
     background-color: var(--color-super-light-blue);
-    padding: 2rem 3rem;
-    margin-top: 2rem;
+    /* padding: 2rem 3rem; */
+    /* margin-top: 2rem; */
     border-radius: 10px;
 }
 .form_div label {
@@ -39,12 +39,18 @@
     padding-left: 0.6rem;
 }
 .imageTemp {
-    width: 10rem;
-    margin-left: 1rem;
+    width: 35%;
+    display: inline;
+    /* margin-left: 1rem; */
     margin-top: 1rem;
     border-radius: 5px;
 }
-
+.divtrai {
+    width: 37vw;
+}
+.divPhai {
+    width: 37vw;
+}
 @media only screen and (max-width: 600px) {
     .headerDiv {
         padding: 3rem 3rem;
@@ -56,7 +62,7 @@
         font-size: 1rem;
     }
     .form_div div {
-        width: 90%;
+        width: 90vw;
         margin: auto;
         padding: 1rem 1rem;
         margin-top: 1rem;

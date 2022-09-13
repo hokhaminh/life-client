@@ -36,3 +36,14 @@
     margin-right: 0;
     display: inline-block;
 }
+@media only screen and (max-width: 600px) {
+    .form_div2 {
+        width: 90vw;
+    }
+    .input_file_update {
+        width: 100%;
+    }
+    .input_update_post_image {
+        width: 100%;
+    }
+}

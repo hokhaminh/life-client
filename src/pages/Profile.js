@@ -14,6 +14,7 @@ import { useLazyFetch } from "../utils/useFetch";
 import moment from "moment";
 import Swal from "sweetalert2";
 import { useTitle } from "../utils/useTitle";
+import Loading from "../components/Loading";
 
 const Profile = () => {
     const navigate = useNavigate();
@@ -25,7 +26,7 @@ const Profile = () => {
     };
     const user = localStorage.getItem("life");
 
-    const [fetchDataProfile, { data }] = useLazyFetch(
+    const [fetchDataProfile, { data, loading }] = useLazyFetch(
         `${API}/profile/${JSON.parse(user).userId}`
     );
     //Fetch API Delete post
@@ -37,6 +38,7 @@ const Profile = () => {
     }, []);
     return (
         <div>
+            {loading && <Loading />}
             <HorizontalNav />
             <div className="header">
                 <h1 className="ms-5">{data?.fullname}</h1>
@@ -49,7 +51,7 @@ const Profile = () => {
                 <Tabs
                     defaultActiveKey="profile"
                     id="uncontrolled-tab-example"
-                    className="mb-3"
+                    className="mb-3 w-100"
                 >
                     <Tab eventKey="home" title="About">
                         <InFor name={"User ID"} value={data?.userId} />
@@ -139,33 +141,37 @@ const PostCreated = ({
 }) => {
     const navigate = useNavigate();
     return (
-        <div className="d-flex">
+        <div className="d-flex postDiv">
             <div
-                className="post-created d-flex align-items-center mb-4 me-2"
+                className="post-created d-flex justify-content-between align-items-center mb-4 me-2"
                 onClick={() => {
                     navigate(link);
                 }}
             >
                 <img
-                    src={imgURL}
+                    src={
+                        imgURL !== null
+                            ? imgURL
+                            : "https://i.ibb.co/zNDpV0N/depositphotos-189716808-stock-illustration-black-mourning-ribbon-isolated-on.webp"
+                    }
                     className="img_post_created"
                     alt="the loved one in small size"
                 />
-                <div className="d-flex flex-column me-auto">
-                    <h3 className="fs-5">{fullname}</h3>
+                <div className="d-flex flex-column name-year">
+                    <h3 className="fs-6 fs-md-5 w-100">{fullname}</h3>
                     <p>
                         {birthyear} - {deathYear}
                     </p>
                 </div>
 
-                <div className="d-flex flex-column">
-                    <p>Created: {CreatedAt}</p>
+                <div className="d-flex flex-column create-comment">
+                    <p className="text-end">Created: {CreatedAt}</p>
                     <span className="text-end">
                         {NoComment} <ChatText />
                     </span>
                 </div>
             </div>
-            <div className="d-flex flex-column">
+            <div className="d-flex flex-column ">
                 <button className="btn_edit" onClick={onClickUpdate}>
                     <PencilSquare size={30} />
                 </button>
