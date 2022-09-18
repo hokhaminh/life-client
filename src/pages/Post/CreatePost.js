@@ -243,7 +243,6 @@ const CreatePost = () => {
                                     <img
                                         src={urlTemp}
                                         className="imageTemp"
-                                        alt="Preview picture"
                                     />
                                     <ReCAPTCHA
                                         name="recaptcha"
